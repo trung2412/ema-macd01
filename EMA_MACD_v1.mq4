@@ -54,12 +54,12 @@ void CheckForOpen()
       
       if(ema5a>ema15a && ema5<ema15 && macd<0 && Bid<ema50 && Bid<ema100)
         {
-            order = OrderSend(Symbol(),OP_SELL,0.1,Bid,5,SL,Bid + TP*Point,"",MAGICMA,0,Red);
+            order = OrderSend(Symbol(),OP_SELL,0.1,Bid,5,SL,Bid - TP*Point,"",MAGICMA,0,Red);
             return;
         } 
       if(ema5a<ema15a && ema5>ema15 && macd>0 && Bid>ema50 && Bid>ema100)
         {
-            order = OrderSend(Symbol(),OP_BUY,0.1,Ask,5,SL,Ask - TP*Point,"",MAGICMA,0,Green);
+            order = OrderSend(Symbol(),OP_BUY,0.1,Ask,5,SL,Ask + TP*Point,"",MAGICMA,0,Green);
             return;
         }
    }
@@ -77,7 +77,7 @@ void CheckForClose()
       
       if(OrderType()==OP_BUY)
         {
-         if(ema5<ema15 || macd<0)
+         if(ema5<ema15 && macd<0)
            {
             if(!OrderClose(OrderTicket(),0.1,Bid,5,White))
                Print("OrderClose error ",GetLastError());
@@ -85,7 +85,7 @@ void CheckForClose()
         }
       if(OrderType()==OP_SELL)
         {
-         if(ema5>ema15 || macd>0)
+         if(ema5>ema15 && macd>0)
            {
             if(!OrderClose(OrderTicket(),0.1,Ask,5,White))
                Print("OrderClose error ",GetLastError());
@@ -106,7 +106,7 @@ void OnTick()
       
       if(CalculateCurrentOrders(Symbol())==0)
       {
-         if(ema50<Bid<ema100 || ema50>Bid>ema100)
+         if(ema50<Bid<ema100 && ema50>Bid>ema100)
          {
                return;
          }else 
